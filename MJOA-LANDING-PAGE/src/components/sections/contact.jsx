@@ -3,14 +3,12 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { motion, AnimatePresence } from 'framer-motion'
 import { Phone, Mail, MapPin, CheckCircle2 } from 'lucide-react'
-import { SOCIAL_ICON_MAP } from '@/components/ui/social-icons'
 import { Section, SectionHeader } from '@/components/layout/section'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import { contactFormSchema } from '@/lib/validations'
-import { SOCIAL_LINKS } from '@/lib/constants'
 import { fadeInLeft, fadeInRight, MotionDiv } from '@/components/ui/motion'
 
 function Confetti() {
@@ -49,14 +47,45 @@ export function Contact() {
     defaultValues: { name: '', email: '', phone: '', company: '', message: '' },
   })
 
+  // --- UPDATED ONSUBMIT FUNCTION ---
   const onSubmit = async (data) => {
     setLoading(true)
-    await new Promise((resolve) => setTimeout(resolve, 1500))
-    console.log('Form submitted:', data)
-    setLoading(false)
-    setSubmitted(true)
-    reset()
-    setTimeout(() => setSubmitted(false), 5000)
+    
+    try {
+      // Prepare the form data for Web3Forms
+      const formData = new FormData()
+      formData.append('access_key', 'fd90ed90-bd98-4846-8cff-f7e30c19cbc1') // Your Access Key
+      formData.append('name', data.name)
+      formData.append('email', data.email)
+      formData.append('phone', data.phone)
+      formData.append('company', data.company || 'N/A') // Send 'N/A' if company is empty
+      formData.append('message', data.message)
+
+      // Send the data to Web3Forms API
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json'
+        },
+        body: formData
+      })
+
+      const result = await response.json()
+
+      if (result.success) {
+        // Success logic
+        reset()
+        setSubmitted(true)
+        setTimeout(() => setSubmitted(false), 5000)
+      } else {
+        alert('There was an error sending your message. Please try again.')
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error)
+      alert('Network error. Please try again.')
+    } finally {
+      setLoading(false)
+    }
   }
 
   return (
@@ -69,7 +98,7 @@ export function Contact() {
 
       <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
         <MotionDiv variants={fadeInLeft}>
-          <div className="space-y-8">
+          <div className="space-y-8 mt-15">
             {[
               { icon: Phone, label: 'Phone', value: '571-562-5006', href: 'tel:+15715625006' },
               { icon: Mail, label: 'Email', value: 'info@mjoa-consulting.com', href: 'mailto:info@mjoa-consulting.com' },
@@ -96,27 +125,6 @@ export function Contact() {
                 </div>
               </div>
             ))}
-
-            <div>
-              <p className="text-sm font-medium text-muted mb-4">Follow Us</p>
-              <div className="flex gap-3">
-                {SOCIAL_LINKS.map((social) => {
-                  const Icon = SOCIAL_ICON_MAP[social.icon]
-                  return (
-                    <a
-                      key={social.label}
-                      href={social.href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={social.label}
-                      className="flex h-11 w-11 items-center justify-center rounded-xl border border-border text-muted transition-all duration-300 hover:border-primary hover:text-primary hover:bg-primary-muted hover:-translate-y-0.5"
-                    >
-                      <Icon className="h-5 w-5" />
-                    </a>
-                  )
-                })}
-              </div>
-            </div>
           </div>
         </MotionDiv>
 

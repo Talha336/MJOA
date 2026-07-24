@@ -1,8 +1,7 @@
 import { ArrowUp } from 'lucide-react'
 import { Container } from './container'
 import { scrollToSection } from '@/lib/utils'
-import { SOCIAL_LINKS } from '@/lib/constants'
-import { SOCIAL_ICON_MAP } from '@/components/ui/social-icons'
+import logo2 from '@/assets/logo2.png'
 
 export function Footer() {
   const footerLinks = {
@@ -29,30 +28,17 @@ export function Footer() {
       <Container className="py-16 md:py-20">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 lg:gap-8">
           <div className="lg:col-span-2">
-            <div className="flex items-center gap-2 mb-4">
-              <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white font-bold text-sm">M</div>
-              <span className="text-xl font-bold text-white">MJOA</span>
-            </div>
+          <div className="mb-4">
+  <img
+    src={logo2}
+    alt="MJOA Consulting"
+    className="h-16 w-auto object-contain"
+  />
+</div>
             <p className="text-sm leading-relaxed text-white/60 max-w-sm">
               Helping small businesses grow through targeted digital advertising and high-converting marketing strategies.
             </p>
-            <div className="flex gap-3 mt-6">
-              {SOCIAL_LINKS.map((social) => {
-                const Icon = SOCIAL_ICON_MAP[social.icon]
-                return (
-                  <a
-                    key={social.label}
-                    href={social.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={social.label}
-                    className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white/70 transition-all duration-300 hover:bg-primary hover:text-white hover:-translate-y-0.5"
-                  >
-                    <Icon className="h-4 w-4" />
-                  </a>
-                )
-              })}
-            </div>
+
           </div>
 
           {Object.entries(footerLinks).map(([title, links]) => (

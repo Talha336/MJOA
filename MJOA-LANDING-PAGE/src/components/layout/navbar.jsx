@@ -6,6 +6,7 @@ import { NAV_LINKS } from '@/lib/constants'
 import { cn, scrollToSection } from '@/lib/utils'
 import { useScrolled } from '@/hooks/useScrolled'
 import { useScrollSpy } from '@/hooks/useScrollSpy'
+import logo1 from '@/assets/logo1.png'
 
 export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -32,17 +33,18 @@ export function Navbar() {
         )}
       >
         <nav className="mx-auto flex h-16 md:h-20 max-w-[1280px] items-center justify-between px-4 sm:px-6 lg:px-8" aria-label="Main navigation">
-          <button
-            onClick={() => handleNavClick('home')}
-            className="flex items-center gap-2 group"
-            aria-label="MJOA Home"
-          >
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-primary text-white font-bold text-sm transition-transform duration-300 group-hover:scale-105">
-              M
-            </div>
-            <span className="text-xl font-bold tracking-tight text-foreground">MJOA</span>
-          </button>
+        <button
+  onClick={() => handleNavClick('home')}
+  className="flex items-center gap-3 group"
+  aria-label="MJOA Home"
+>
+  <img
+    src={logo1}
+    alt="MJOA Consulting"
+    className="h-14 w-auto object-contain transition-transform duration-300 group-hover:scale-105"
+  />
 
+</button>
           <ul className="hidden lg:flex items-center gap-1">
             {NAV_LINKS.map((link) => (
               <li key={link.href}>
